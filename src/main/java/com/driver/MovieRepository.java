@@ -12,73 +12,102 @@ public class MovieRepository {
     // add in the database
 
 
-    //List of Movies
-    List<Movie> listOfMovies = new ArrayList<>();
+    //List of Movie
+
+    HashMap<String, Movie> listOfMovies = new HashMap<>();
 
     // List od Director
-    List<Director> listOfDirector = new ArrayList<>();
+
+    HashMap<String,Director> listOfDirector = new HashMap<>();
 
     // List of Director and movie pair
-    HashMap<Director,List> db = new HashMap<>();
+    HashMap<String,List<String>> db = new HashMap<>();
 
     String addMovie(Movie movie){
-        listOfMovies.add(movie);
-        return "Successfully added movie in the movie list";
+        listOfMovies.put(movie.getName(),movie);
+        return "New movie has been added Successfully";
     }
 
     String addDirector(Director director){
-        listOfDirector.add(director);
-        return "Successfully added director in the director list";
+        listOfDirector.put(director.getName(),director);
+        return "New director has been added successfully";
     }
-    String addMovieDirectorPair(Director director,Movie movie){
-        if(db.containsKey(director)){
-            List<Movie> ls = db.get(director);
-            db.put(director,ls);
-        }else{
-            List<Movie> ls = new ArrayList<>();
-            ls.add(movie);
-            db.put(director,ls);
+    String addMovieDirectorPair(String director,String movie){
+        if(listOfMovies.containsKey(director) && listOfDirector.containsKey(movie)){
+            if(db.containsKey(director)){
+                List<String > ls = db.get(director);
+                ls.add(movie);
+                db.put(director,ls);
+            }else{
+                List<String> ls = new ArrayList<>();
+                ls.add(movie);
+                db.put(director,ls);
+            }
         }
         return "Successfully added director and movie pair in the database";
     }
+
+
     Movie getMovieByName(String name){
-        for(Movie m:listOfMovies){
-            if(m.getName().equals(name)){
-                return m;
-            }
-        }
-        return null;
+
+        return listOfMovies.get(name);
     }
     Director getDirectorByName(String name){
-        for(Director d:listOfDirector){
-            if(d.getName().equals(name)){
-                return d;
-            }
-        }
-        return null;
+
+        return listOfDirector.get(name);
     }
 
-    List<Movie> getMoviesByDirectorName(Director director){
+    List<String> getMoviesByDirectorName(String  director){
         if(db.containsKey(director)){
             return db.get(director);
         }
         return null;
     }
 
-    List<Movie> findAllMovies(){
-        return listOfMovies;
+    List<String > findAllMovies(){
+        List<String> ans = new ArrayList<>();
+        for( String s : listOfMovies.keySet()){
+            ans.add(s);
+        }
+        return ans;
     }
 
-    String deleteDirectorByName(Director director){
+    String deleteDirectorByName(String  director){
+        // delete from the director database
+        listOfDirector.remove(director);
+
+        // if that director is present in the pair database, so we have  to delete the respective movies as well
+        // we can get the movies from the pair of the database
         if(db.containsKey(director)){
+
+            // get the movies from the database
+            List<String> ls = db.get(director);
+            //iterate the movie database and if the movie is present in the database so we will remove the movie from there as well as.
+            for(String l:ls){
+                if(listOfMovies.containsKey(l)){
+                    listOfMovies.remove(l);
+                }
+            }
+
+            // delete the director from the pair database
             db.remove(director);
-            return "Successfully director has been deleted from the database";
-        }else{
-            return "There is no data available";
+
         }
+        return "Successfully deleted";
     }
     String deleteAllDirectors(){
-        db.clear();
+        listOfDirector = new HashMap<>();
+
+        for(String s : db.keySet()){
+            List<String> ls  = db.get(s);
+            for(String st : ls){
+                if(listOfMovies.containsKey(st)){
+                    listOfMovies.remove(st);
+                }
+            }
+        }
+
+        db = new HashMap<>();
         return "successfully all the director have been deleted from tha database";
     }
 }
