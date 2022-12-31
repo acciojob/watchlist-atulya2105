@@ -23,16 +23,16 @@ public class MovieRepository {
     // List of Director and movie pair
     HashMap<String,List<String>> db = new HashMap<>();
 
-    String addMovie(Movie movie){
+    public void  addMovie(Movie movie){
         listOfMovies.put(movie.getName(),movie);
-        return "New movie has been added Successfully";
+
     }
 
-    String addDirector(Director director){
+    public void addDirector(Director director){
         listOfDirector.put(director.getName(),director);
-        return "New director has been added successfully";
+
     }
-    String addMovieDirectorPair(String director,String movie){
+    public void addMovieDirectorPair(String director,String movie){
         if(listOfMovies.containsKey(director) && listOfDirector.containsKey(movie)){
             if(db.containsKey(director)){
                 List<String > ls = db.get(director);
@@ -44,7 +44,7 @@ public class MovieRepository {
                 db.put(director,ls);
             }
         }
-        return "Successfully added director and movie pair in the database";
+
     }
 
 
@@ -72,7 +72,7 @@ public class MovieRepository {
         return ans;
     }
 
-    String deleteDirectorByName(String  director){
+    public void deleteDirectorByName(String  director){
         // delete from the director database
         listOfDirector.remove(director);
 
@@ -93,9 +93,9 @@ public class MovieRepository {
             db.remove(director);
 
         }
-        return "Successfully deleted";
+
     }
-    String deleteAllDirectors(){
+    public void deleteAllDirectors(){
         listOfDirector = new HashMap<>();
 
         for(String s : db.keySet()){
@@ -108,6 +108,6 @@ public class MovieRepository {
         }
 
         db = new HashMap<>();
-        return "successfully all the director have been deleted from tha database";
+
     }
 }
