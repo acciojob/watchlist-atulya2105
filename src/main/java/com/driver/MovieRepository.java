@@ -58,6 +58,15 @@ public class MovieRepository {
         return new ArrayList<>(movieDb.keySet());
     }
 
+    public String findDirectorNameInDb(String movie){
+        for(String st: directorMovieDb.keySet()){
+            List<String> ls = (List<String>) directorDb.get(st);
+            if(ls.contains(movie)){
+                return st;
+            }
+        }
+        return null;
+    }
     public void deleteDirector(String director){
 
         List<String> movies = new ArrayList<String>();

@@ -19,6 +19,8 @@ Pass movie name and director name as request parameters
 Return success message wrapped in a ResponseEntity object
 Controller Name - addMovieDirectorPair
  */
+
+// Go to the line number 49
 @RestController
 @RequestMapping("movies")
 public class MovieController {
@@ -44,7 +46,7 @@ public class MovieController {
     }
 
     @GetMapping("/get-movie-by-name/{name}")
-    public ResponseEntity<Movie> getMovieByName(@PathVariable String name){
+    public ResponseEntity<Movie> getMovieByMovieName(@PathVariable String name){
         Movie movie = movieService.findMovies(name);
         return new ResponseEntity<>(movie, HttpStatus.CREATED);
     }
@@ -61,6 +63,12 @@ public class MovieController {
         return new ResponseEntity<>(movies, HttpStatus.CREATED);
     }
 
+    // Get director name by movie name
+    @GetMapping("/get-director-by-movie-name/{movie}")
+    public ResponseEntity<String>getDirectorNameByMoviesName(@PathVariable String movie){
+        String val = movieService.findDirectorName(movie);
+        return new ResponseEntity<>(val,HttpStatus.CREATED);
+    }
     @GetMapping("/get-all-movies")
     public ResponseEntity<List<String>> findAllMovies(){
         List<String> movies = movieService.findAllMovies();
